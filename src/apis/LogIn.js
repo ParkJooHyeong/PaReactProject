@@ -1,35 +1,58 @@
-import React from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import '../pages/login.css'; // External CSS 파일 import
 
 const Login = () => {
-  const handleLogin = () => {
-    // 여기에 로그인 버튼 클릭 시 수행할 동작을 추가합니다.
-    console.log('Login button clicked');
-    // 추가적인 로그인 로직을 구현하거나, 부모 컴포넌트에 이벤트를 전달할 수 있습니다.
-  };
+    const [credentials, setCredentials] = useState({username: '', password: ''});
 
-  return (
-    <div className="background">
-      <div className="shape"></div>
-      <div className="shape"></div>
-      <form>
-        <h3>Login Here</h3>
-        <label htmlFor="username">Username</label>
-        <input type="text" placeholder="Email or Phone" id="username" />
-        <label htmlFor="password">Password</label>
-        <input type="password" placeholder="Password" id="password" />
-        <button onClick={handleLogin}>Log In</button>
-        <div className="social">
-          <div className="go">
-            <i className="fab fa-google"></i> Google
-          </div>
-          <div className="fb">
-            <i className="fab fa-facebook"></i> Facebook
-          </div>
+    const handleInputChange = (e) => {
+        const {name, value} = e.target;
+        setCredentials((prevCredentials) => ({
+            ...prevCredentials,
+            [name]: value
+        }));
+    };
+
+    const handleLogin = async () => {
+        try {
+            const response = await axios.post('서버 API 엔드포인트 URL', credentials);
+
+            if (response.status === 200) {
+                // 로그인 성공
+                console.log('로그인 성공');
+            } else {
+                // 로그인 실패
+                console.error('로그인 실패');
+            }
+        } catch (error) {
+            console.error('에러 발생:', error.message);
+        }
+    };
+
+    return (
+        <div className="background">
+            <div className="shape"></div>
+            <div className="shape"></div>
+            <form>
+                <h3>Login Here</h3>
+                <label htmlFor="username">Username</label>
+                <input type="text" placeholder="Email or Phone" id="username"/>
+                <label htmlFor="password">Password</label>
+                <input type="password" placeholder="Password" id="password"/>
+                <button onClick={handleLogin}>Log In</button>
+                <div className="social">
+                    <div className="go">
+                        <i className="fab fa-google"></i>
+                        Google
+                    </div>
+                    <div className="fb">
+                        <i className="fab fa-facebook"></i>
+                        Facebook
+                    </div>
+                </div>
+            </form>
         </div>
-      </form>
-    </div>
-  );
+    );
 };
 
 export default Login;
